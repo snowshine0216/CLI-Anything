@@ -32,6 +32,7 @@
 !/anygen/
 !/zoom/
 !/drawio/
+!/web-dossier/
 
 # Step 5: Inside each software dir, ignore everything (including dotfiles)
 /gimp/*
@@ -56,6 +57,8 @@
 /zoom/.*
 /drawio/*
 /drawio/.*
+/web-dossier/*
+/web-dossier/.*
 
 # Step 6: ...except agent-harness/
 !/gimp/agent-harness/
@@ -69,6 +72,7 @@
 !/anygen/agent-harness/
 !/zoom/agent-harness/
 !/drawio/agent-harness/
+!/web-dossier/agent-harness/
 
 # Step 7: Ignore build artifacts within allowed dirs
 **/__pycache__/
@@ -93,4 +97,3 @@ assets/gen_typing_gif.py
 !README_CN.md
 !opencode-commands/
 !/qoder-plugin/
-

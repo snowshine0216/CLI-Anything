@@ -7,7 +7,10 @@ with all filters applied and exporting to various image formats.
 import os
 from typing import Dict, Any, Optional, Tuple
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps, ImageDraw, ImageFont
-import numpy as np
+try:
+    import numpy as np
+except ImportError:
+    np = None
 
 
 # Export presets
@@ -413,6 +416,9 @@ def _composite_layer(
 
 def _blend_with_mode(base: Image.Image, layer: Image.Image, mode: str) -> Image.Image:
     """Apply blend mode using numpy pixel math."""
+    if np is None:
+        raise ImportError("numpy is required for non-normal blend modes")
+
     base_arr = np.array(base, dtype=np.float64)
     layer_arr = np.array(layer, dtype=np.float64)
 
