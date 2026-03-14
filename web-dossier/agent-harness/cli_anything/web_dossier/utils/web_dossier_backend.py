@@ -26,14 +26,11 @@ def run_step(source_path: str, step: dict[str, Any], timeout: int = 3600, dry_ru
     command = step.get("command", [])
     name = step.get("name", "step")
 
-    resolved = _resolve_executable(command, cwd)
-    if resolved is None:
-        raise RuntimeError(
-            f"Executable not found for step '{name}': {command[0] if command else '<empty>'}. "
-            "Install required tools and ensure they are on PATH."
-        )
-
+    # In dry-run mode we only validate command shape and report execution metadata.
+    # We intentionally do not require the executable to exist.
     if dry_run:
+        if not command:
+            raise RuntimeError(f"Step '{name}' has empty command.")
         return {
             "name": name,
             "cwd": cwd,
@@ -44,7 +41,15 @@ def run_step(source_path: str, step: dict[str, Any], timeout: int = 3600, dry_ru
             "elapsed_sec": 0.0,
             "stdout": "",
             "stderr": "",
+            "executable_check": "skipped",
         }
+
+    resolved = _resolve_executable(command, cwd)
+    if resolved is None:
+        raise RuntimeError(
+            f"Executable not found for step '{name}': {command[0] if command else '<empty>'}. "
+            "Install required tools and ensure they are on PATH."
+        )
 
     start = time.time()
     completed = subprocess.run(
